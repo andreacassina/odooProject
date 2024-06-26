@@ -1,0 +1,23 @@
+python3 odoo-bin --addons-path="addons/,../tutorials"
+
+LINK TUTORIALS:
+https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/01_architecture.html
+https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/02_newapp.html
+https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
+
+
+Per creare una nuova categoria di add-on basta fare una cartella fuori da OdooProject e specificare il path(./nome-cartella) negli addons da linea di comando
+python3 odoo-bin --addons-path="addons/,../tutorials" -d rd-demo
+
+PYTHON DEBUGGING
+import ipdb; 
+ipdb.set_trace()
+https://www.odoo.com/documentation/17.0/developer/tutorials/setup_guide.html#python-debugging
+
+Un modulo Odoo è dichiarato dal suo manifest
+https://www.odoo.com/documentation/17.0/developer/reference/backend/module.html#reference-module-manifest
+
+All'interno di ogni modulo (cartella) devono esserci 2 file:
+- __manifest__.py
+- __init__.py (vedi dopo)
+
