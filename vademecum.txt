@@ -1,13 +1,18 @@
-LINK INSTALLAZIONE
+LINK TUTORIALS INSTALLAZIONE:
 	https://www.odoo.com/documentation/17.0/contributing/development.html
 	https://www.odoo.com/documentation/17.0/administration/on_premise/source.html
 
-LINK TUTORIALS:
+LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/01_architecture.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/02_newapp.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/04_securityintro.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
 
-TUTORIALS
+TUTORIALS FRAMEWORK
+
+	SETUP GUIDE:
+
 	python3 odoo-bin --addons-path="addons/,../tutorials"
 
 	Per creare una nuova categoria di add-on basta fare una cartella fuori da OdooProject (es tutorials) e specificare il path(../nome-cartella) negli addons da linea di comando
@@ -18,9 +23,47 @@ TUTORIALS
 		ipdb.set_trace()
 		https://www.odoo.com/documentation/17.0/developer/tutorials/setup_guide.html#python-debugging
 
+
+	CAPITOLO 2: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/02_newapp.html
+
 	Un modulo Odoo è dichiarato dal suo manifest
 	https://www.odoo.com/documentation/17.0/developer/reference/backend/module.html#reference-module-manifest
 
 	All'interno di ogni modulo (cartella) devono esserci 2 file:
 	- __manifest__.py (esempio https://github.com/odoo/odoo/blob/fc92728fb2aa306bf0e01a7f9ae1cfa3c1df0e10/addons/crm/__manifest__.py#L1-L67)
 	- __init__.py (vedi dopo)
+
+
+	CAPITOLO 3: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
+	
+	Link documentazione Model ORM: https://www.odoo.com/documentation/17.0/developer/reference/backend/orm.html#reference-orm-model
+
+	Tutti i modelli vanno inseriti nella cartella models
+	In <nome-add-on>/models/<nome-classe>.py definisco il modello (campi, etc)
+	Il file <nome-classe>.py deve essere importato in <nome-add-on>/models/__init__.py 
+	La cartella models deve essere importata in <nome-add-on>/__init__-py
+
+	Esempio di modello (CRM): https://github.com/odoo/odoo/blob/e80911aaead031e7523173789e946ac1fd27c7dc/addons/crm/models/crm_recurring_plan.py#L1-L9
+
+	Dopo aver creato il modello bisogna riavviare il server con il comando python3 odoo-bin --addons-path="addons/,../tutorials" -d <nome-db> -u <nome-add-on>
+
+
+	CAPITOLO 4: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/04_securityintro.html
+	
+	Quando necessito di importare un file lo devo aggiungere in una delle seguenti cartelle:
+	- data: file generici
+	- views: file che sono relativi alle viste
+	- security: file che sono relativi alla sicurezza
+	Dopodichè il percorso del file va aggiunto nel manifest nella variabile data
+	I file sono caricati sequenzialmente, quindi se un file fa riferimento ad un altro quest'ultimo va specificato prima nella variabile data.
+
+	Per specificare i permessi sulla tabella che rappresenta il modello bisogna specificare nel file security/ir.model.access.csv i seguenti parametri:
+	id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+	- id: access_<nome_modello>
+	- name: access_<nome_modello>
+	- model_id: model_<nome-modello>
+	- group_id: il gruppo che può modificarlo (ad es. base.group_user)
+	- perm_read,perm_write,perm_create,perm_unlink: 0 per dare permesso o 1 per NON dare permesso 
+	
+
+	CAPITOLO 5: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
