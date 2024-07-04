@@ -67,3 +67,56 @@ TUTORIALS FRAMEWORK
 	
 
 	CAPITOLO 5: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
+	Azioni e menù sono record standard nel DB
+	La UI in Odoo può seguire il pattern standard Menu > Action > View:
+	- L'utente naviga i menù per accedere ai record
+	- Il livello più basso è un'azione che triggera l'apertura di una lista di record (view)
+
+	Ci sono 3 modi di triggerare le azioni:
+	- Cliccando sugli oggetti del menù (collegati a specifiche azioni) (questa lezione)
+	- Cliccando bottoni nelle views (Lezione 6)
+	- Come azione contestuale in oggetti ()
+
+	La vista è dichiarata tramite file <nome_classe>_views.xml che va inserito nella cartella views (e dichiarato nel manifest)
+	All'interno del file views/<nome_classe>.xml una struttura può essere la seguente:
+	<odoo>
+		<record id="estate_property_first_menu" model="ir.actions.act_window">
+			<field name="name"><nome_azione></field>
+			<field name="res_model"><modello_di_riferimento></field>
+			<field name="view_mode"><tree,form></field>
+		</record>
+	</odoo>
+	- id: identificativo esterno
+	- model: sempre ir.actions.act_window
+	- name: nome dell'azione
+	- res_model: modello a cui l'azione verrà applicata
+	- view_mode: viste che saranno disponibili: tree = lista, form = form (ce ne possono essere anche altre)
+	
+	Esempio di vista (CRM): https://github.com/odoo/odoo/blob/09c59012bf80d2ccbafe21c39e604d6cfda72924/addons/crm/views/crm_lost_reason_views.xml#L57-L70
+
+	Un modo rapido per creare un menù è utilizzare una shorcut come di seguito:
+	<odoo>
+		<menuitem id="estate_menu_root" name="Estate">
+			<menuitem id="estate_first_level_menu" name="Estate - First Level">
+				<menuitem id="estate_property_menu_action" action="estate_property_action"/>
+			</menuitem>
+		</menuitem>
+	</odoo>
+	Il menù è così linkato all'azione creata in precedenza.
+
+	I menù seguono sempre una un'architettura a 3 livelli:
+	- Root Menù mostrato nell'App Switcher
+	- Il menù di 1°livello mostrato nella barra in alto
+	- I menù delle azioni
+
+	Personalizzare le view: in genere vogliamo
+	- campi con valore di default (default=... nel modello)
+	- campi in sola lettura (readonly=True nel modello)
+	- campi che non sono copiati quando il record viene duplicato (copy=False nel modello)
+
+	Il campo active (Booleano) definisce se il record è attivo o no.
+	Un record non attivo non verrà visualizzato nella vista se non quando imposto con i filtri la sua visualizzazione (active is set).
+	Perciò di default andrebbe inserito nella classe come di seguito:
+	active = fields.Boolean(default=True)
+
+	Quando specifico il valore di default di un campo di tipo Selection, devo specificare la chiave (Selection è definita come ('key', 'Value'))
