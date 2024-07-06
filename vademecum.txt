@@ -8,6 +8,7 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/04_securityintro.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/06_basicviews.html
 
 TUTORIALS FRAMEWORK
 
@@ -23,8 +24,9 @@ TUTORIALS FRAMEWORK
 		ipdb.set_trace()
 		https://www.odoo.com/documentation/17.0/developer/tutorials/setup_guide.html#python-debugging
 
-
+	###
 	CAPITOLO 2: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/02_newapp.html
+	###
 
 	Un modulo Odoo è dichiarato dal suo manifest
 	https://www.odoo.com/documentation/17.0/developer/reference/backend/module.html#reference-module-manifest
@@ -33,9 +35,10 @@ TUTORIALS FRAMEWORK
 	- __manifest__.py (esempio https://github.com/odoo/odoo/blob/fc92728fb2aa306bf0e01a7f9ae1cfa3c1df0e10/addons/crm/__manifest__.py#L1-L67)
 	- __init__.py (vedi dopo)
 
-
+	###
 	CAPITOLO 3: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
-	
+	###
+
 	Link documentazione Model ORM: https://www.odoo.com/documentation/17.0/developer/reference/backend/orm.html#reference-orm-model
 
 	Tutti i modelli vanno inseriti nella cartella models
@@ -47,9 +50,10 @@ TUTORIALS FRAMEWORK
 
 	Dopo aver creato il modello bisogna riavviare il server con il comando python3 odoo-bin --addons-path="addons/,../tutorials" -d <nome-db> -u <nome-add-on>
 
-
+	###
 	CAPITOLO 4: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/04_securityintro.html
-	
+	###
+
 	Quando necessito di importare un file lo devo aggiungere in una delle seguenti cartelle:
 	- data: file generici
 	- views: file che sono relativi alle viste
@@ -65,8 +69,10 @@ TUTORIALS FRAMEWORK
 	- group_id: il gruppo che può modificarlo (ad es. base.group_user)
 	- perm_read,perm_write,perm_create,perm_unlink: 0 per dare permesso o 1 per NON dare permesso 
 	
-
+	###
 	CAPITOLO 5: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
+	###
+
 	Azioni e menù sono record standard nel DB
 	La UI in Odoo può seguire il pattern standard Menu > Action > View:
 	- L'utente naviga i menù per accedere ai record
@@ -120,3 +126,58 @@ TUTORIALS FRAMEWORK
 	active = fields.Boolean(default=True)
 
 	Quando specifico il valore di default di un campo di tipo Selection, devo specificare la chiave (Selection è definita come ('key', 'Value'))
+
+	###
+	CAPITOLO 6: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/06_basicviews.html
+	###
+
+	Lista personalizzata (Tree):
+	<field name="arch" type="xml">
+		<tree string="Channel" editable="bottom">
+			<field name="name"/>
+		</tree>
+	</field>
+
+	Form personalizzata (Form):
+	<field name="arch" type="xml">
+		<form string="Test">
+			<sheet>
+				<group>
+					<group>
+						<field name="name"/>
+					</group>
+					<group>
+						<field name="last_seen"/>
+					</group>
+				</group>
+				<notebook>
+					<page string="Description">
+						<field name="description"/>
+					</page>
+				</notebook>
+			</sheet>
+		</form>
+	</field>
+
+	Esempio CRM: https://github.com/odoo/odoo/blob/6da14a3aadeb3efc40f145f6c11fc33314b2f15e/addons/crm/views/crm_lost_reason_views.xml#L46-L54
+
+	Search personalizzata (Search):
+	<field name="arch" type="xml">
+		<search string="Tests">
+			<field name="name"/>
+			<field name="last_seen"/>
+			<separator/>
+			<filter name="Available Properties" domain="['|', ('state', '=', 'new'), ('state', '=', 'offer received')]"/>
+			<group string="Group By">
+				<filter string="Postcode" name="postcode" context="{'group_by':'postcode'}"/>
+			</group>
+		</search>
+	</field>
+
+	Le viste Search posso anche contenere il tag <filter>, che agisce da toggle per ricerche predefinite
+	I filtri devono avere uno dei seguenti attributi:
+	- domain: è una lista di criteri utilizzato per seleczionale un sottoset di record del modello. 
+			  ogni criterio è una tripletta (nome_campo, operatore, valore)
+	- context: aggiunge del contesto alla ricerca corrente; usa la chiave group_by per raggruppare i risultati sul dato campo
+	
+	Esempio Search: https://github.com/odoo/odoo/blob/715a24333bf000d5d98b9ede5155d3af32de067c/addons/delivery/views/delivery_view.xml#L30-L44
