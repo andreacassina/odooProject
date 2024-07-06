@@ -9,6 +9,7 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/04_securityintro.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/06_basicviews.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
 
 TUTORIALS FRAMEWORK
 
@@ -181,3 +182,15 @@ TUTORIALS FRAMEWORK
 	- context: aggiunge del contesto alla ricerca corrente; usa la chiave group_by per raggruppare i risultati sul dato campo
 	
 	Esempio Search: https://github.com/odoo/odoo/blob/715a24333bf000d5d98b9ede5155d3af32de067c/addons/delivery/views/delivery_view.xml#L30-L44
+
+	###
+	CAPITOLO 7: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
+	###
+
+	Relazione 1-N: dal lato N introduco un campo del tipo fields.Many2one("<nome_modello>")
+
+	relazione N-N: dal lato "principale" introduco un campo del tipo fields.Many2many("<nome_modello>")
+	Si comporta come un recordset ovvero una collezione ordinata 
+
+	relazione N-1: dal lato 1 si introduce un campo del tipo fields.one2Many("<nome_modello>", "<nome_campo>")
+	Per esser presente una 1 a N dal lato N deve essere presente una N a 1
