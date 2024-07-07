@@ -250,3 +250,35 @@ TUTORIALS FRAMEWORK
     def _onchange_partner_id(self):
         self.name = "Document for %s" % (self.partner_id.name)
         self.description = "Default description for %s" % (self.partner_id.name)
+
+###
+CAPITOLO 9: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/09_actions.html
+###
+
+Per  connettere la business logic con la view dobbiamo:
+- Aggiungere un bottone alla view
+	<form>
+		<header>
+			<button name="action_do_something" type="object" string="Do Something"/>
+		</header>
+		<sheet>
+			<field name="name"/>
+		</sheet>
+	</form>
+- Linkare il bottone alla business logic:
+	class TestAction(models.Model):
+		_name = "test.action"
+
+		name = fields.Char()
+
+		def action_do_something(self):
+			for record in self:
+				record.name = "Something"
+			return True
+
+Aggiungendo al bottone l'attributo type="object", Odoo eseguirà un metodo con nome quello specificato nell'attributo name del dato modello.
+Il metodo deve essere pubblico (non inizia con _)
+L'oggetto self contiene tutti i record delle tabelle (dobbiamo ciclare)
+Esempio (CRM): 
+- view: https://github.com/odoo/odoo/blob/cd9af815ba591935cda367d33a1d090f248dd18d/addons/crm/views/crm_lead_views.xml#L9-L11 
+- metodo: https://github.com/odoo/odoo/blob/cd9af815ba591935cda367d33a1d090f248dd18d/addons/crm/models/crm_lead.py#L746-L760
