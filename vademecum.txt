@@ -10,6 +10,7 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/05_firstui.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/06_basicviews.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/08_compute_onchange.html
 
 TUTORIALS FRAMEWORK
 
@@ -194,3 +195,58 @@ TUTORIALS FRAMEWORK
 
 	relazione N-1: dal lato 1 si introduce un campo del tipo fields.one2Many("<nome_modello>", "<nome_campo>")
 	Per esser presente una 1 a N dal lato N deve essere presente una N a 1
+
+	###
+	CAPITOLO 8: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/08_compute_onchange.html
+	###
+
+	Per creare un campo calcolato, bisogna creare un campo e settare l'attributo compute col nome di un metodo.
+	Il metodo di computazione deve settare il valore del campo computato per ogni record in self.
+	I metodi di computazione sono privati (iniziano con _) così che non possano essere chiamati dal presentation tier ma solo da business tier.
+	L'ORM si aspetto che vengano specificate le dipendenze sui campi computati con il decoratore depends().
+	L'oggetto self indica tutti i record della tabella quindi è necessario effettuare un ciclo.
+	Esempio (campo total dipendente da amount): 
+	from odoo import api
+	...
+	total = fields.Float(compute="_compute_total")
+    amount = fields.Float()
+
+	@api.depends("amount")
+	def _compute_total(self):
+		for record in self:
+				record.total = 2.0 * record.amount
+
+	Altri esempi: https://github.com/odoo/odoo/blob/713dd3777ca0ce9d121d5162a3d63de3237509f4/addons/account/models/account_move.py#L3420-L3423
+
+	Per accedere a campi "riferimento" la sintassi è la seguente:
+	...
+	partner_id = fields.Many2one("res.partner")
+
+	@api.depends("partner_id.name")
+	def _compute_description(self):
+		for record in self:
+			record.description = "Test for partner %s" % record.partner_id.name
+
+	Se voglio che due campi si influenzino a vicenda (esempio: giorni di validità, data di validità) devo utilizzare una inverse function:
+	...
+	total = fields.Float(compute="_compute_total", inverse="_inverse_total")
+    amount = fields.Float()
+
+    @api.depends("amount")
+    def _compute_total(self):
+        for record in self:
+            record.total = 2.0 * record.amount
+
+    def _inverse_total(self):
+        for record in self:
+            record.amount = record.total / 2.0
+
+	Per aggiungere ai campi di ricerca un campo computato bisogna dichiarare la funzione search oppure aggiungere l'attributo store=True.
+	Esempio Search: https://github.com/odoo/odoo/blob/f011c9aacf3a3010c436d4e4f408cd9ae265de1b/addons/event/models/event_event.py#L188
+
+	Se vogliamo implementare comportamenti onchange bisogna utilizzare la seguente sintassi (self indica il record).
+	...
+	@api.onchange("partner_id")
+    def _onchange_partner_id(self):
+        self.name = "Document for %s" % (self.partner_id.name)
+        self.description = "Default description for %s" % (self.partner_id.name)
