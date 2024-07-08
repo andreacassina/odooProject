@@ -11,6 +11,7 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/06_basicviews.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/08_compute_onchange.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/10_constraints.html
 
 TUTORIALS FRAMEWORK
 
@@ -282,3 +283,22 @@ L'oggetto self contiene tutti i record delle tabelle (dobbiamo ciclare)
 Esempio (CRM): 
 - view: https://github.com/odoo/odoo/blob/cd9af815ba591935cda367d33a1d090f248dd18d/addons/crm/views/crm_lead_views.xml#L9-L11 
 - metodo: https://github.com/odoo/odoo/blob/cd9af815ba591935cda367d33a1d090f248dd18d/addons/crm/models/crm_lead.py#L746-L760
+
+###
+CAPITOLO 10: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/10_constraints.html
+###
+
+I vincolo SQL sono definiti mediante l'attributo _sql_constraints all'interno del modello.
+L'attributo è formato da una tripletta (name, sql_definition, message)
+- name: nome del vincolo
+- sql_definition: table_costraint di Postgree (https://www.postgresql.org/docs/12/ddl-constraints.html)
+- message: messaggio di errore
+
+Esempio: https://github.com/odoo/odoo/blob/24b0b6f07f65b6151d1d06150e376320a44fd20a/addons/analytic/models/analytic_account.py#L20-L23
+
+Un altro modo di specificare un vincolo è mediante le contrains() Python come segue:
+@api.constrains('date_end')
+def _check_date_end(self):
+    for record in self:
+        if record.date_end < fields.Date.today():
+            raise ValidationError("The end date cannot be set in the past")
