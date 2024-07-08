@@ -12,6 +12,7 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/08_compute_onchange.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/10_constraints.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/11_sprinkles.html
 
 TUTORIALS FRAMEWORK
 
@@ -302,3 +303,38 @@ def _check_date_end(self):
     for record in self:
         if record.date_end < fields.Date.today():
             raise ValidationError("The end date cannot be set in the past")
+
+###
+CAPITOLO 11: https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/11_sprinkles.html
+###
+
+Se voglio personalizzare la vista mostrata tramite dal campo che rappresenta la relazione Many2one dichiaro un tree tra i taga field:
+<field name="property_ids">
+	<tree>
+		<field name="name"/>
+		<field name="expected_price"/>
+		<field name="state"/>
+	</tree>
+</field>
+
+Ogni tipo di dato ha dei widget che possono essere mostrati (vedi documentazione)
+
+Per specificare l'ordine in cui vengono visualizzati gli elementi di una classe basta dichiarare nel model l'ordine:
+_order = "<nome_campo> desc"
+
+Oppure posso ordinare direttamente dalla view come segue:
+<tree default_order="date desc">
+	<field name="date"/>
+	<field name="author_id"/>
+	<field name="mail_activity_type_id"/>
+	<field name="body"/>
+	<field name="company_id" groups="base.group_multi_company"/>
+</tree>
+
+Se voglio poter ordinare manualmente devo inserire nel modello il campo sequence, utilizzare il widget handle e specificare il campo sequence 
+come primo nel campo _order
+
+IN GENERALE IN QUESTO CAPITOLO MOSTRA ZUCCHERO SINTATTICO PER MIGLIORARE LA BELLEZZA DELLE VISTE
+AL MOMENTO NON ESSENDO CORE BUSINESS CI INTERROMPIAMO
+...
+
