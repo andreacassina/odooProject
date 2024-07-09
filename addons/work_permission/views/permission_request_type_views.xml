@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="permission_request_type_action" model="ir.actions.act_window">
+        <field name="name">Permission request type</field>
+        <field name="res_model">permission.request.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+</odoo>
