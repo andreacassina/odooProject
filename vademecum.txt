@@ -345,3 +345,8 @@ IN GENERALE IN QUESTO CAPITOLO MOSTRA ZUCCHERO SINTATTICO PER MIGLIORARE LA BELL
 AL MOMENTO NON ESSENDO CORE BUSINESS CI INTERROMPIAMO
 ...
 
+################
+### PROGETTO ###
+################
+
+Avvio del server: python3 odoo-bin --addons-path="addons/" -d progetto-gsi -u work_permission --dev xml

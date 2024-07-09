@@ -1,8 +1,52 @@
 <?xml version="1.0"?>
 <odoo>
+    <!-- Dichiarazione viste di default -->
     <record id="permission_request_type_action" model="ir.actions.act_window">
-        <field name="name">Permission request type</field>
+        <field name="name">Permission Request Type</field>
         <field name="res_model">permission.request.type</field>
         <field name="view_mode">tree,form</field>
     </record>
+
+    <!-- Vista Tree personalizzata -->
+    <record id="permission_request_type_tree_action" model="ir.ui.view">
+        <field name="name">permission.request.type.tree</field>
+        <field name="model">permission.request.type</field>
+        <field name="arch" type="xml">
+            <tree string="Permission Request Types List">
+                <field name="name"/>
+                <field name="time_in" string="Time in"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista Form personalizzata -->
+    <record id="permission_request_type_form_action" model="ir.ui.view">
+        <field name="name">permission.request.type.form</field>
+        <field name="model">permission.request.type</field>
+        <field name="arch" type="xml">
+            <form string="Permission Request Type Create/Update">
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <field name="time_in" string="Time in"/>
+                        <field name="description"/>
+                    </group> 
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="permission_request_type_search_action" model="ir.ui.view">
+        <field name="name">permission.request.type.search</field>
+        <field name="model">permission.request.type</field>
+        <field name="arch" type="xml">
+            <search string="Permission Request Type Search">
+                <field name="name"/>
+                <field name="time_in" string="Time in"/>
+            </search>
+        </field>
+    </record>
 </odoo>
+
