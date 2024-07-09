@@ -3,6 +3,7 @@ LINK TUTORIALS INSTALLAZIONE:
 	https://www.odoo.com/documentation/17.0/administration/on_premise/source.html
 
 LINK TUTORIALS FRAMEWORK:
+	--- IMPLEMENTATI COMPLETAMENTE
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/01_architecture.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/02_newapp.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/03_basicmodel.html
@@ -12,7 +13,13 @@ LINK TUTORIALS FRAMEWORK:
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/07_relations.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/08_compute_onchange.html
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/10_constraints.html
+	--- NON IMPLEMENTATI O IMPLEMENTATI PARZIALMENTE
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/11_sprinkles.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/12_inheritance.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/13_other_module.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/14_qwebintro.html
+	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/15_final_word.html
+
 
 TUTORIALS FRAMEWORK
 
