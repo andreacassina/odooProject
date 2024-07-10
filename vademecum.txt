@@ -1,7 +1,7 @@
 LINK TUTORIALS INSTALLAZIONE:
 	https://www.odoo.com/documentation/17.0/contributing/development.html
 	https://www.odoo.com/documentation/17.0/administration/on_premise/source.html
-
+	https://www.odoo.com/documentation/17.0/developer/tutorials.html
 LINK TUTORIALS FRAMEWORK:
 	--- IMPLEMENTATI COMPLETAMENTE
 	https://www.odoo.com/documentation/17.0/developer/tutorials/server_framework_101/01_architecture.html
@@ -350,3 +350,9 @@ AL MOMENTO NON ESSENDO CORE BUSINESS CI INTERROMPIAMO
 ################
 
 Avvio del server: python3 odoo-bin --addons-path="addons/" -d progetto-gsi -u work_permission --dev xml
+
+CONTROLLO ACCESSO: https://www.odoo.com/documentation/17.0/developer/tutorials/restrict_data_access.html
+DASHBOARD: https://www.odoo.com/documentation/17.0/developer/tutorials/discover_js_framework/02_build_a_dashboard.html	 
+VIDEO YT CALENDARIO: https://www.youtube.com/watch?v=qZNuM4EXXPQ&ab_channel=OdooDiscussions
+TUTORIAL CALENDARIO ODOO 15: https://www.cybrosys.com/blog/how-to-create-a-calendar-view-in-menus-of-the-odoo-15 
+(https://www.odoo.com/it_IT/forum/assistenza-1/customizing-calendar-view-185208)
