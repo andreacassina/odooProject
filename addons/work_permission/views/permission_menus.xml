@@ -8,4 +8,7 @@
             <menuitem id="permission_request_type_menu_action" action="permission_request_type_action"/>
         </menuitem>
     </menuitem>
+    <!-- <menuitem id="permission_menu_root" name="Permission">
+
+    </menuitem> -->
 </odoo>
