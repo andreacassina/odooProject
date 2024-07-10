@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<odoo>
+    <!-- Dichiarazione viste di default -->
+    <record id="permission_request_action" model="ir.actions.act_window">
+        <field name="name">Permission Request</field>
+        <field name="res_model">permission.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Vista Tree personalizzata -->
+    <record id="permission_request_tree" model="ir.ui.view">
+        <field name="name">permission.request.tree</field>
+        <field name="model">permission.request</field>
+        <field name="arch" type="xml">
+            <tree string="Permission Requests List">
+                <field name="title" />
+                <field name="applicant" />
+                <field name="request_type_id" string="Type" />
+                <field name="state" />
+                <field name="datetime_from" string="From" />
+                <field name="datetime_to" string="To" />
+            </tree>
+        </field>
+    </record>
+</odoo>
