@@ -1,2 +1,3 @@
 id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_permission_request_type,access_permission_request_type,model_permission_request_type,base.group_user,1,1,1,1
+access_permission_request_type,access_permission_request_type,model_permission_request_type,base.group_system,1,1,1,1
+access_permission_request,access_permission_request,model_permission_request,base.group_system,1,1,1,1
