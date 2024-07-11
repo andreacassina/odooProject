@@ -17,11 +17,9 @@
                 <field name="applicant" />
                 <field name="request_type_id" string="Type" />
                 <field name="state" />
-                <field name="formatted_datetime_from" string="From" />
-                <field name="formatted_datetime_to" string="To" />
                 <!-- Buttons for accept or refuse the request -->
                 <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'/>
-                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-solid fa-xmark'/>
+                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times'/>
             </tree>
         </field>
     </record>
@@ -33,7 +31,7 @@
             <form string="Permission request">
                 <header>
                     <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'/>
-                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-solid fa-xmark'/>
+                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times'/>
                     <field name="state" widget="statusbar" statusbar_visible=""/>
                 </header>
                 <sheet>
@@ -49,14 +47,10 @@
                                 <field name="time_in" string="Time in" />
                             </group>  
                             <group>
-                                
-                                <!-- <field name="datetime_from" string="From" widget="date"/>
-                                <field name="datetime_to" string="To" widget="date"/> -->
-                                <field name="datetime_from" widget="datetime" invisible="time_in == 'day'"/>
-                                <field name="date_from" widget="date" invisible="time_in != 'day'"/>
-                                <field name="datetime_to" widget="datetime" invisible="time_in == 'day'"/>
-                                <field name="date_to" widget="date" invisible="time_in != 'day'"/>
-                            </group>  
+                                <field name="datetime_from" widget="datetime"/>
+                                <field name="duration"/>
+                                <field name="datetime_to" widget="datetime"/>
+                            </group>
                         </group>  
                 </sheet>
             </form>
