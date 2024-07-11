@@ -5,7 +5,7 @@ import math
 class PermissionRequest(models.Model):
     _name = 'permission.request'
     _description = 'Permission Request'
-    _order = 'id desc'
+    _order = 'sort_order asc, datetime_from desc'
     _sql_constraints = [
         ('check_duration_positive', 'CHECK(duration > 0)','Duration must be positive')
         ]
@@ -29,6 +29,8 @@ class PermissionRequest(models.Model):
     datetime_from = fields.Datetime(default = lambda self: datetime.now(), required = True, string="From") # Included
     datetime_to = fields.Datetime(compute = "_compute_datetime_to", inverse = "_inverse_datetime_to", string="To") # Included
     duration = fields.Integer(required = True, default = 1)
+
+    sort_order = fields.Integer(compute='_compute_sort_order', store=True)
     
     ###############################################################################################################
     ############################################### COMPUTED FIELDS ###############################################
@@ -64,6 +66,15 @@ class PermissionRequest(models.Model):
                 if(record.datetime_from + timedelta(days=1) < record.datetime_to):
                     raise exceptions.UserError("Invalid duration: You are asking more than 24 hours permission: Use a Dayly Permission")
                 record.duration = math.ceil((record.datetime_to - record.datetime_from).seconds/3600)
+    
+    @api.depends('state', 'datetime_from')
+    def _compute_sort_order(self):
+        for record in self:
+            if record.state == 'new':
+                record.sort_order = 0
+            else:
+                record.sort_order = 1
+
                 
 
     ###############################################################################################################

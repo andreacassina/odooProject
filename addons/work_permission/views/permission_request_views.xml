@@ -16,7 +16,8 @@
                 <field name="title" />
                 <field name="applicant" />
                 <field name="request_type_id" string="Type" />
-                <field name="state" />
+                <!-- <field name="state" /> -->
+                <field name="state" widget="badge" decoration-primary="state == 'new'" decoration-success="state == 'accepted'" decoration-danger="state == 'refused'"/>
                 <!-- Buttons for accept or refuse the request -->
                 <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'/>
                 <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times'/>
@@ -47,7 +48,8 @@
                                 <field name="time_in" string="Time in" />
                             </group>  
                             <group>
-                                <field name="datetime_from" widget="datetime"/>
+                                <field name="datetime_from" widget="datetime"/> 
+                                
                                 <field name="duration"/>
                                 <field name="datetime_to" widget="datetime"/>
                             </group>
