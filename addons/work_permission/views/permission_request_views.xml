@@ -13,14 +13,14 @@
         <field name="model">permission.request</field>
         <field name="arch" type="xml">
             <tree string="Permission Requests List">
-                <field name="title" />
+                <field name="title"/>
                 <field name="applicant" />
                 <field name="request_type_id" string="Type" />
                 <!-- <field name="state" /> -->
                 <field name="state" widget="badge" decoration-primary="state == 'new'" decoration-success="state == 'accepted'" decoration-danger="state == 'refused'"/>
                 <!-- Buttons for accept or refuse the request -->
-                <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'/>
-                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times'/>
+                <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' groups="base.group_user"/>
+                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' groups="base.group_user"/>
             </tree>
         </field>
     </record>

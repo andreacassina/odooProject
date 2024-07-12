@@ -9,6 +9,7 @@
     ],
 
     'data': [
+        'security/security.xml',
         'security/ir.model.access.csv',
         'views/permission_request_type_views.xml',
         'views/permission_request_views.xml',

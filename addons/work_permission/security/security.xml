@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        VALORI EVAL
+        1. (1, id, values): This represents the operation of creating a new record and linking it to the current record. id is the id of the record to create, and values represent the field values of the new record.
+        2. (2, id): This represents the operation of updating an existing record referenced by id.
+        3. (3, id): This represents the operation of unlinking or deleting the record referenced by id.
+        4. (4, id): This represents the operation of linking an existing record referenced by id.
+        5. (5): This represents the operation of unlinking all existing linked records.
+        6. (6, 0, [ids]): This represents the operation of replacing existing linked records with the records specified in ids.
+    -->
+
+    <record id="base.module_category_myaddons_workpermissions" model="ir.module.category">
+        <field name="description">Helps you manage permissions.</field>
+        <!-- <field name="sequence">9</field> -->
+    </record>
+
+    <record id="permission_group_worker" model="res.groups">
+        <field name="name">Worker</field>
+        <field name="category_id" ref="base.module_category_myaddons_workpermissions"/>
+        <!-- <field name="implied_ids" eval="[(0, ref('base.group_user'))]"/> -->
+        <field name="comment">The Worker will be able to create and read his permissions</field>
+    </record>
+
+    <record id="permission_group_admin" model="res.groups">
+        <field name="name">Administrator</field>
+        <field name="category_id" ref="base.module_category_myaddons_workpermissions"/>
+        <!-- <field name="implied_ids" eval="[(4, ref('permission_group_worker'))]"/> -->
+        <field name="comment">The Administrator will be able to access all the views and records</field>
+    </record>
+
+    <!-- RULES -->
+    
+    <record id="workers_permissions_rule" model="ir.rule">
+        <field name="name">Workers can only see theirs requests</field>
+        <field name="model_id" ref="model_permission_request"/>
+        <field name="groups" eval="[(4, ref('permission_group_worker'))]"/>
+        <field name="domain_force">['|',('applicant','=',False),('applicant', '=', user.id)]</field>
+    </record>
+</odoo>

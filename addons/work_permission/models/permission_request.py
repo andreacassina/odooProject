@@ -67,21 +67,20 @@ class PermissionRequest(models.Model):
                     raise exceptions.UserError("Invalid duration: You are asking more than 24 hours permission: Use a Dayly Permission")
                 record.duration = math.ceil((record.datetime_to - record.datetime_from).seconds/3600)
     
-    @api.depends('state', 'datetime_from')
+    #@api.depends('state', 'datetime_from')
+    @api.depends('state')
     def _compute_sort_order(self):
         for record in self:
             if record.state == 'new':
                 record.sort_order = 0
-            else:
+            elif record.state == 'pending':
                 record.sort_order = 1
-
-                
+            else:
+                record.sort_order = 2
 
     ###############################################################################################################
     ############################################# ONCHANGE FUNCTIONS ##############################################
     ###############################################################################################################
-
-     
 
     ###############################################################################################################
     ############################################ COSTRAINTS FUNCTIONS #############################################
