@@ -19,8 +19,9 @@
                 <!-- <field name="state" /> -->
                 <field name="state" widget="badge" decoration-primary="state == 'new'" decoration-success="state == 'accepted'" decoration-danger="state == 'refused'"/>
                 <!-- Buttons for accept or refuse the request -->
-                <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' groups="base.group_user"/>
-                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' groups="base.group_user"/>
+                <button name="permission_request_action_read" type="object" string="Read" icon='fa-brands fa-readme' invisible="state in ('pending', 'accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
             </tree>
         </field>
     </record>
@@ -31,8 +32,8 @@
         <field name="arch" type="xml">
             <form string="Permission request">
                 <header>
-                    <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'/>
-                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times'/>
+                    <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' groups='work_permission.permission_group_admin'/>
+                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' groups='work_permission.permission_group_admin'/>
                     <field name="state" widget="statusbar" statusbar_visible=""/>
                 </header>
                 <sheet>

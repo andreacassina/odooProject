@@ -31,7 +31,9 @@ class PermissionRequest(models.Model):
     duration = fields.Integer(required = True, default = 1)
 
     sort_order = fields.Integer(compute='_compute_sort_order', store=True)
-    
+
+    create_date = fields.Datetime('Creation Date' , readonly=True)
+
     ###############################################################################################################
     ############################################### COMPUTED FIELDS ###############################################
     ###############################################################################################################
@@ -78,6 +80,19 @@ class PermissionRequest(models.Model):
             else:
                 record.sort_order = 2
 
+    @api.model
+    def check_and_update_state(self):
+
+        all_records = self.search([])
+
+        for record in all_records:
+            if record.create_date != None:
+                if record.create_date < (datetime.now() - timedelta(seconds=30)):
+                    if record.state == 'new' or record.state == 'pending':
+                        record.state = 'refused'
+                else:
+                    record.state = 'accepted'
+
     ###############################################################################################################
     ############################################# ONCHANGE FUNCTIONS ##############################################
     ###############################################################################################################
@@ -113,4 +128,10 @@ class PermissionRequest(models.Model):
         for record in self:
             if record.state != 'accepted' and record.state != 'refused':
                 record.state = 'refused'
+        return True
+
+    def permission_request_action_read(self):
+        for record in self:
+            if record.state != 'accepted' and record.state != 'refused':
+                record.state = 'pending'
         return True
