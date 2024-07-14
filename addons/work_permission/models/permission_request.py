@@ -80,8 +80,6 @@ class PermissionRequest(models.Model):
                 if record.create_date < (datetime.now() - timedelta(days=3)):
                     if record.state == 'new' or record.state == 'pending':
                         record.state = 'refused'
-                """else:
-                    record.state = 'accepted'"""
 
     ###############################################################################################################
     ############################################# ONCHANGE FUNCTIONS ##############################################
@@ -125,6 +123,3 @@ class PermissionRequest(models.Model):
             if record.state != 'accepted' and record.state != 'refused':
                 record.state = 'pending'
         return True
-
-    def _get_today_date(self):
-        return datime.now()
