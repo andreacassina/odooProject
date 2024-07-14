@@ -1,6 +1,6 @@
 from odoo import api,fields, models, exceptions
 from datetime import datetime, timedelta
-import math
+import pytz
 
 class PermissionRequest(models.Model):
     _name = 'permission.request'
@@ -27,49 +27,36 @@ class PermissionRequest(models.Model):
     )
     time_in = fields.Selection([ ('day', 'Day'), ('hour', 'Hour')], required = True, default = 'hour')
     datetime_from = fields.Datetime(default = lambda self: datetime.now(), required = True, string="From") # Included
-    datetime_to = fields.Datetime(compute = "_compute_datetime_to", inverse = "_inverse_datetime_to", string="To") # Included
+    datetime_to = fields.Datetime(compute = "_compute_datetime_to", string="To") # Included
     duration = fields.Integer(required = True, default = 1)
 
     sort_order = fields.Integer(compute='_compute_sort_order', store=True)
-
-    create_date = fields.Datetime('Creation Date' , readonly=True)
+    create_date = fields.Datetime('Creation Date', readonly=True, default = lambda self: datetime.now())
 
     ###############################################################################################################
     ############################################### COMPUTED FIELDS ###############################################
     ###############################################################################################################
 
-    @api.depends('applicant', 'request_type_id', 'state', 'datetime_from', 'datetime_to')
+    @api.depends('applicant', 'request_type_id', 'state', 'create_date')
     def _compute_title(self):
+        utc_tz = pytz.utc
+        rome_tz = pytz.timezone('Europe/Rome')
+        now_utc = datetime.now(utc_tz)
+        now_rome = now_utc.astimezone(rome_tz)
+        time_diff = now_rome.utcoffset() - now_utc.utcoffset()
         for record in self:
-            record.title = "[" + record.state + "] " + record.applicant.name + ": " + record.request_type_id.name + " ("
-            if record.time_in == 'hour':
-                record.title += record.datetime_from.strftime("%d/%m/%Y %H:%M") + " - " + record.datetime_to.strftime("%d/%m/%Y %H:%M") + ")"
-            else:
-                record.title += record.datetime_from.strftime("%d/%m/%Y") + " - " + record.datetime_to.strftime("%d/%m/%Y") + ")"
+            record.title = "[" + record.state + "] " + record.applicant.name + ": " + record.request_type_id.name + " (" + (record.create_date+time_diff).strftime("%d/%m/%Y %H:%M:%S") + ")"
 
     @api.depends('datetime_from', 'duration', 'time_in')
     def _compute_datetime_to(self):
         for record in self:
             if record.time_in == 'day':
-                #record.datetime_from -= timedelta(hours=record.datetime_from.hour+2, minutes=record.datetime_from.minute, seconds=record.datetime_from.second, microseconds=record.datetime_from.microsecond - 100)
                 record.datetime_from -= timedelta(days=-1, hours=record.datetime_from.hour+2, minutes=record.datetime_from.minute, seconds=record.datetime_from.second)
                 record.datetime_to = record.datetime_from + timedelta(days = record.duration - 1, hours=23, minutes = 59)
-                #record.datetime_to = record.datetime_from + timedelta(days = record.duration - 1)
             else: # record.time_in == 'hour'
                 record.datetime_from -= timedelta(seconds=record.datetime_from.second)
                 record.datetime_to = record.datetime_from + timedelta(hours = record.duration)
-
-    def _inverse_datetime_to(self):
-        for record in self:
-            if record.time_in == 'day':
-                record.datetime_to -= timedelta(hours=record.datetime_to.hour-21, minutes=record.datetime_to.minute-59, seconds=record.datetime_to.second)
-                record.duration = (record.datetime_to - record.datetime_from).days + 1   
-            else:
-                if(record.datetime_from + timedelta(days=1) < record.datetime_to):
-                    raise exceptions.UserError("Invalid duration: You are asking more than 24 hours permission: Use a Dayly Permission")
-                record.duration = math.ceil((record.datetime_to - record.datetime_from).seconds/3600)
     
-    #@api.depends('state', 'datetime_from')
     @api.depends('state')
     def _compute_sort_order(self):
         for record in self:
@@ -77,8 +64,10 @@ class PermissionRequest(models.Model):
                 record.sort_order = 0
             elif record.state == 'pending':
                 record.sort_order = 1
-            else:
+            elif record.state == 'accepted':
                 record.sort_order = 2
+            else:
+                record.sort_order = 3
 
     @api.model
     def check_and_update_state(self):
@@ -87,11 +76,12 @@ class PermissionRequest(models.Model):
 
         for record in all_records:
             if record.create_date != None:
-                if record.create_date < (datetime.now() - timedelta(seconds=30)):
+                #if record.create_date < (datetime.now() - timedelta(seconds=30)):
+                if record.create_date < (datetime.now() - timedelta(days=3)):
                     if record.state == 'new' or record.state == 'pending':
                         record.state = 'refused'
-                else:
-                    record.state = 'accepted'
+                """else:
+                    record.state = 'accepted'"""
 
     ###############################################################################################################
     ############################################# ONCHANGE FUNCTIONS ##############################################
@@ -135,3 +125,6 @@ class PermissionRequest(models.Model):
             if record.state != 'accepted' and record.state != 'refused':
                 record.state = 'pending'
         return True
+
+    def _get_today_date(self):
+        return datime.now()
