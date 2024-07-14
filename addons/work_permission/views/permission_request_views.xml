@@ -14,12 +14,12 @@
         <field name="arch" type="xml">
             <tree string="Permission Requests List">
                 <field name="title"/>
-                <field name="applicant" />
+                <field name="applicant"/>
                 <field name="request_type_id" string="Type" />
                 <!-- <field name="state" /> -->
                 <field name="state" widget="badge" decoration-primary="state == 'new'" decoration-success="state == 'accepted'" decoration-danger="state == 'refused'"/>
                 <!-- Buttons for accept or refuse the request -->
-                <button name="permission_request_action_read" type="object" string="Read" icon='fa-brands fa-readme' invisible="state in ('pending', 'accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                <button name="permission_request_action_read" type="object" string="Read" icon="fa-eye" invisible="state in ('pending', 'accepted', 'refused')" groups='work_permission.permission_group_admin'/>
                 <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
                 <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
             </tree>
@@ -32,31 +32,67 @@
         <field name="arch" type="xml">
             <form string="Permission request">
                 <header>
-                    <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check' groups='work_permission.permission_group_admin'/>
-                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' groups='work_permission.permission_group_admin'/>
-                    <field name="state" widget="statusbar" statusbar_visible=""/>
+                    <button name="permission_request_action_read" type="object" string="Read" icon="fa-eye" invisible="state in ('pending', 'accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                    <button name="permission_request_action_accept" type="object" string="Accept" icon='fa-check'  invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                    <button name="permission_request_action_refuse" type="object" string="Refuse" icon='fa-times' invisible="state in ('accepted', 'refused')" groups='work_permission.permission_group_admin'/>
+                    <field name="state" widget="statusbar" statusbar_visible="" />
                 </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="title"/>
+                            <field name="title" readonly="True"/>
                         </h1>
                     </div>
                         <group>
                             <group>
-                                <field name="applicant" />
-                                <field name="request_type_id" string="Type" />
-                                <field name="time_in" string="Time in" />
+                                <field name="description" readonly="state in ('accepted', 'refused')"/>
+                                <field name="request_type_id" string="Type" readonly="state in ('accepted', 'refused')"/>
+                                <field name="time_in" string="Time in" readonly="state in ('accepted', 'refused')" />
                             </group>  
                             <group>
-                                <field name="datetime_from" widget="datetime"/> 
-                                
-                                <field name="duration"/>
-                                <field name="datetime_to" widget="datetime"/>
+                                <field name="datetime_from" widget="datetime" readonly="state in ('accepted', 'refused')"/> 
+                                <field name="duration" readonly="state in ('accepted', 'refused')"/>
+                                <field name="datetime_to" widget="datetime" readonly="True"/>
                             </group>
-                        </group>  
+                        </group>
+                        <notebook>
+                            <page string="Admin Fields" groups='work_permission.permission_group_admin'>
+                                <group>
+                                    <field name="applicant" readonly="state in ('accepted', 'refused')"/>
+                                    <field name="active"/>
+                                    <field name="state"/>
+                                    <field name="sort_order"/>
+                                    <field name="create_date"/>
+                                </group>
+                            </page>
+                        </notebook>
                 </sheet>
             </form>
         </field>
     </record>
+
+     <!-- Vista Search personalizzata -->
+    <record id="permission_request_search" model="ir.ui.view">
+        <field name="name">permission.request.search</field>
+        <field name="model">permission.request</field>
+        <field name="arch" type="xml">
+            <search string="Permission Request Type Search">
+                <field name="applicant" groups='work_permission.permission_group_admin'/>
+                <field name="active" groups='work_permission.permission_group_admin'/>
+                <field name="create_date" groups='work_permission.permission_group_admin'/>
+                <field name="datetime_from" />
+                <field name="datetime_to" />
+                <field name="request_type_id" string="Type" />
+                <field name="state"/>
+                <field name="title"/>
+                <separator/>
+                <filter string="Inactive Requests" name="inactive" domain="[('active', '=', False)]" groups='work_permission.permission_group_admin'/>
+                <group expand="1" string="Group By">
+                    <filter string="Group By Applicant" name="group-by-applicant" context="{'group_by':'applicant', 'active':True}" groups='work_permission.permission_group_admin'/>
+                    <filter string="Group By State" name="group-by-state" context="{'group_by':'state', 'active':True}" groups='work_permission.permission_group_admin'/>
+                </group>
+            </search>
+        </field>
+    </record>
+
 </odoo>
