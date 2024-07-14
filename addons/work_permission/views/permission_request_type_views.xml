@@ -36,6 +36,7 @@
         </field>
     </record>
 
+    <!-- Vista Search personalizzata -->
     <record id="permission_request_type_search" model="ir.ui.view">
         <field name="name">permission.request.type.search</field>
         <field name="model">permission.request.type</field>
@@ -45,5 +46,6 @@
             </search>
         </field>
     </record>
+    
 </odoo>
 
